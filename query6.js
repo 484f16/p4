@@ -8,8 +8,6 @@
 // Return a decimal variable as the average user friend count of all users
 // in the Users collection.
 
-
-
 function find_average_friendcount(dbname){
   db = db.getSiblingDB(dbname)
   // Implementation goes here
@@ -20,11 +18,15 @@ function find_average_friendcount(dbname){
   while (mycursor.hasNext()){
   	var curtUser = mycursor.next();
   	cnt++;
-  	if (curtUser.friends.isEmpty()){
+  	if (Object.keys(curtUser.friends).length == 0){
   		continue;
   	}
   	var curtFriends = db.flat_users.find({user_id:curtUser.user_id});
-  	amountFriends = amountFriends + curtFriends.length;
+    // curtFriends = curtFriends.next();
+  	amountFriends = amountFriends + curtFriends.length();
+
+    // db.users.aggregate( [ { $group : { _id:null, count : {$sum:1}, totalFriends:{$sum:} } }])
+    // db.users.aggregate( [ { $group : { _id:null, avg_count: {$avg: "$friends.length()"}} }])
 
   }
   return amountFriends/cnt;  
